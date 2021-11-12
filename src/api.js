@@ -12,6 +12,8 @@ connectDB();
 
 // const router = express.Router();
 
+app.use(express.json());
+
 app.get('/', (req, res) => {
 	res.send('Hello World!');
 });
@@ -22,22 +24,30 @@ app.get('/ping', (req, res) => {
 
 app.post('/api/supply', async (req, res) => {
 	try {
-		// const [supplyId, products] = req.body.SupplyInputDto;
+		const products = req.body.products;
 
 		const catalogue = await axios.get(
 			'https://fhemery-logistics.herokuapp.com/api/products'
 		);
 
-		console.log(catalogue.data);
-		// for (const product of products) {
-		// 	productId = GET productId FROM data WHERE EAN = product.ean
-		// 	targetUrl = `/api/stock/${product.ean}/movement`;
-		// 	const res = await axios.post(targetUrl, {
-		// 		productId: product.name, // This ID is the ID inside the catalogue
-		// 		quantity: product.quantity,
-		// 		status: 'Supply',
-		// 	});
-		// }
+		for (const product of products) {
+			//reste à enregister en BDD les Supplies
+			const singleProduct = catalogue.data.filter(
+				chunk => chunk.ean === product.ean
+			);
+
+			const productId = singleProduct[0]._id;
+
+			const targetUrl = `/api/stock/${productId}/movement`;
+
+			const res = await axios.post(targetUrl, {
+				productId: productId, // This ID is the ID inside the catalogue
+				quantity: product.quantity,
+				status: 'Supply',
+			});
+
+			console.log(res);
+		}
 
 		res.status(204).send();
 	} catch (err) {
