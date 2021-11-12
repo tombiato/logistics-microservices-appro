@@ -4,8 +4,9 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"dev": "nodemon .",
-		"start": "node ."
+		"dev": "nodemon src/api",
+		"start": "./node_modules/.bin/netlify-lambda serve src",
+		"build": "./node_modules/.bin/netlify-lambda build src"
 	},
 	"repository": {
 		"type": "git",
@@ -21,7 +22,8 @@
 	"dependencies": {
 		"dotenv": "^10.0.0",
 		"express": "^4.17.1",
-		"mongoose": "^6.0.12"
+		"mongoose": "^6.0.12",
+		"netlify-lambda": "^2.0.15"
 	},
 	"devDependencies": {
 		"nodemon": "^2.0.15"
