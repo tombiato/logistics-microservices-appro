@@ -81,16 +81,18 @@ app.post('/api/supply', async (req, res) => {
 
 			const productId = singleProduct[0]._id;
 
+			const productMovement = {
+				productId: productId, // This ID is the ID inside the catalogue
+				quantity: product.quantity,
+				status: 'Supply',
+			};
+
 			const res = await axios.post(
 				`https://logistics-microservices-stock.herokuapp.com/api/stock/${productId}/movement`,
-				{
-					productId: productId, // This ID is the ID inside the catalogue
-					quantity: product.quantity,
-					status: 'Supply',
-				}
+				productMovement
 			);
 
-			console.log(res);
+			console.log(res.status);
 		}
 
 		const newInput = new SupplyInputDto({
