@@ -1,0 +1,28 @@
+{
+	"name": "logistics-microservices-appro",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"dev": "nodemon .",
+		"start": "node ."
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/tombiato/logistics-microservices-appro.git"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/tombiato/logistics-microservices-appro/issues"
+	},
+	"homepage": "https://github.com/tombiato/logistics-microservices-appro#readme",
+	"dependencies": {
+		"dotenv": "^10.0.0",
+		"express": "^4.17.1"
+	},
+	"devDependencies": {
+		"nodemon": "^2.0.15"
+	}
+}
