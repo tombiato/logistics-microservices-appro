@@ -24,7 +24,7 @@ app.get('/', (req, res) => {
 	res.send('Hello World!');
 });
 
-app.get('/ping', (req, res) => {
+app.get('api/ping', (req, res) => {
 	res.send('Pong');
 });
 
@@ -32,6 +32,16 @@ app.post('/api/supply', async (req, res) => {
 	try {
 		const products = req.body.products;
 		const supplyId = req.body.supplyId;
+
+		if (
+			!products ||
+			products === null ||
+			products === undefined ||
+			!supplyId ||
+			supplyId === null ||
+			supplyId === undefined
+		)
+			res.status(403).send('Bad informations');
 
 		const catalogue = await axios.get(
 			'https://fhemery-logistics.herokuapp.com/api/products'
@@ -71,13 +81,16 @@ app.post('/api/supply', async (req, res) => {
 
 			const productId = singleProduct[0]._id;
 
-			const targetUrl = `https://logistics-microservices-stock.herokuapp.com/api/stock/${productId}/movement`;
+			const res = await axios.post(
+				`https://logistics-microservices-stock.herokuapp.com/api/stock/${productId}/movement`,
+				{
+					productId: productId, // This ID is the ID inside the catalogue
+					quantity: product.quantity,
+					status: 'Supply',
+				}
+			);
 
-			const res = await axios.post(targetUrl, {
-				productId: productId, // This ID is the ID inside the catalogue
-				quantity: product.quantity,
-				status: 'Supply',
-			});
+			console.log(res);
 		}
 
 		const newInput = new SupplyInputDto({
