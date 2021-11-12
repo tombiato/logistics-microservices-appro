@@ -1,5 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import axios from 'axios';
 import connectDB from '../config/db';
 
 // GLOBAL
@@ -19,8 +20,17 @@ app.get('/ping', (req, res) => {
 	res.send('Pong');
 });
 
-app.post('/api/supply', (req, res) => {
-	// TODO
+app.post('/api/supply', async (req, res) => {
+	try {
+		const [supplyId, products] = req.body.SupplyInputDto;
+
+		for (const product of products) {
+			targetUrl = `/api/stock/${product.ean}/movement`;
+			const res = await axios.post(targetUrl);
+		}
+
+		res.status(204);
+	} catch (err) {}
 });
 
 app.get('/api/supply/summary', (req, res) => {
