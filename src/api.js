@@ -1,6 +1,9 @@
 import express from "express";
 import dotenv from "dotenv";
+import axios from "axios";
 import connectDB from "../config/db";
+import SupplyProductDto from "../models/SupplyProductDto";
+import SupplySummaryDto from "../models/SupplySummaryDto";
 
 // GLOBAL
 dotenv.config();
@@ -19,12 +22,27 @@ app.get("/ping", (req, res) => {
   res.send("Pong");
 });
 
-app.post("/api/supply", (req, res) => {
-  // TODO
+app.post("/api/supply", async (req, res) => {
+  try {
+    const [supplyId, products] = req.body.SupplyInputDto;
+
+    for (const product of products) {
+      targetUrl = `/api/stock/${product.ean}/movement`;
+      const res = await axios.post(targetUrl, {
+        productId: product.name, // This ID is the ID inside the catalogue
+        quantity: product.quantity,
+        status: "Supply",
+      });
+    }
+
+    res.status(204);
+  } catch (err) {}
 });
 
 app.get("/api/supply/summary", async (req, res) => {
-  // TODO
+  const supplies = await SupplyProductDto.find({});
+
+  const summary = new SupplySummaryDto({ nbSupplies: supplies.length });
 });
 
 app.post("/api/supply-needed", (req, res) => {

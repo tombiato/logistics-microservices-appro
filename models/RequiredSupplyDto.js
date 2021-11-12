@@ -1,9 +1,9 @@
-import { model, models, Schema } from "mongoose";
+import mongoose from "mongoose";
 
-export default models.RequiredSupplyDto ||
-  model(
+export default mongoose.models.RequiredSupplyDto ||
+  mongoose.model(
     "RequiredSupplyDto",
-    new Schema({
+    new mongoose.Schema({
       productId: String,
     }),
   );
