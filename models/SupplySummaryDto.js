@@ -1,9 +1,9 @@
-import { model, models, Schema } from "mongoose";
+import mongoose from "mongoose";
 
-export default models.SupplySummaryDto ||
-  model(
+export default mongoose.models.SupplySummaryDto ||
+  mongoose.model(
     "SupplySummaryDto",
-    new Schema({
+    new mongoose.Schema({
       nbSupplies: Number,
       totalNbProducts: Number,
       totalPurchasePrice: Number,
