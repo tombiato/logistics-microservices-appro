@@ -38,7 +38,7 @@ app.post('/api/supply', async (req, res) => {
 
 			const productId = singleProduct[0]._id;
 
-			const targetUrl = `/api/stock/${productId}/movement`;
+			const targetUrl = `https://logistics-microservices-stock.herokuapp.com/api/stock/${productId}/movement`;
 
 			const res = await axios.post(targetUrl, {
 				productId: productId, // This ID is the ID inside the catalogue
