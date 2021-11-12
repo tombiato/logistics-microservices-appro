@@ -22,19 +22,27 @@ app.get('/ping', (req, res) => {
 
 app.post('/api/supply', async (req, res) => {
 	try {
-		const [supplyId, products] = req.body.SupplyInputDto;
+		// const [supplyId, products] = req.body.SupplyInputDto;
 
-		for (const product of products) {
-			targetUrl = `/api/stock/${product.ean}/movement`;
-			const res = await axios.post(targetUrl, {
-				productId: product.name, // This ID is the ID inside the catalogue
-				quantity: product.quantity,
-				status: 'Supply',
-			});
-		}
+		const catalogue = await axios.get(
+			'https://fhemery-logistics.herokuapp.com/api/products'
+		);
 
-		res.status(204);
-	} catch (err) {}
+		console.log(catalogue.data);
+		// for (const product of products) {
+		// 	productId = GET productId FROM data WHERE EAN = product.ean
+		// 	targetUrl = `/api/stock/${product.ean}/movement`;
+		// 	const res = await axios.post(targetUrl, {
+		// 		productId: product.name, // This ID is the ID inside the catalogue
+		// 		quantity: product.quantity,
+		// 		status: 'Supply',
+		// 	});
+		// }
+
+		res.status(204).send();
+	} catch (err) {
+		console.error(err.message);
+	}
 });
 
 app.get('/api/supply/summary', (req, res) => {
