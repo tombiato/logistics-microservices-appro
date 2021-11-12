@@ -3,6 +3,10 @@ import dotenv from 'dotenv';
 import axios from 'axios';
 import connectDB from '../config/db';
 
+// MODELS
+import SupplyProductDto from '../models/SupplyProductDto';
+import SupplyInputDto from '../models/SupplyInputDto';
+
 // GLOBAL
 dotenv.config();
 
@@ -25,13 +29,26 @@ app.get('/ping', (req, res) => {
 app.post('/api/supply', async (req, res) => {
 	try {
 		const products = req.body.products;
+		const supplyId = req.body.supplyId;
 
 		const catalogue = await axios.get(
 			'https://fhemery-logistics.herokuapp.com/api/products'
 		);
 
+		let productsArray = [];
+
 		for (const product of products) {
-			//reste à enregister en BDD les Supplies
+			const newProduct = new SupplyProductDto({
+				ean: product.ean,
+				name: product.name,
+				description: product.description,
+				purchasePricePerUnit: product.purchasePricePerUnit,
+				quantity: product.quantity,
+			});
+
+			productsArray.push(newProduct);
+			await newProduct.save();
+
 			const singleProduct = catalogue.data.filter(
 				chunk => chunk.ean === product.ean
 			);
@@ -49,6 +66,12 @@ app.post('/api/supply', async (req, res) => {
 			console.log(res);
 		}
 
+		const newInput = new SupplyInputDto({
+			supplyId: supplyId,
+			products: productsArray,
+		});
+		await newInput.save();
+		
 		res.status(204).send();
 	} catch (err) {
 		console.error(err.message);

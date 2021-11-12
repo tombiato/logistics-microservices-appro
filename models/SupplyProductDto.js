@@ -1,13 +1,11 @@
-import { model, models, Schema } from "mongoose";
+import mongoose from 'mongoose';
 
-export default models.SupplyProductDto ||
-  model(
-    "SupplyProductDto",
-    new Schema({
-      ean: String,
-      name: String,
-      description: String,
-      purchasePricePerUnit: String,
-      quantity: Number,
-    }),
-  );
+const SupplyProductDtoSchema = new mongoose.Schema({
+	ean: String,
+	name: String,
+	description: String,
+	purchasePricePerUnit: String,
+	quantity: Number,
+});
+
+export default mongoose.model('SupplyProductDto', SupplyProductDtoSchema);
