@@ -2,42 +2,41 @@ const express = require('express');
 
 // GLOBAL
 require('dotenv').config();
-const port = process.env.PORT || 8000;
+
+const app = express();
 
 const connectDB = require('../config/db');
 
 connectDB();
 
-const app = express();
+// const router = express.Router();
 
-const router = express.Router();
-
-router.get('/', (req, res) => {
+app.get('/', (req, res) => {
 	res.send('Hello World!');
 });
 
-router.get('/ping', (req, res) => {
+app.get('/ping', (req, res) => {
 	res.send('Pong');
 });
 
-router.post('/api/supply', (req, res) => {
+app.post('/api/supply', (req, res) => {
 	// TODO
 });
 
-router.get('/api/supply/summary', (req, res) => {
+app.get('/api/supply/summary', (req, res) => {
 	// TODO
 });
 
-router.post('/api/supply-needed', (req, res) => {
+app.post('/api/supply-needed', (req, res) => {
 	// TODO
 });
 
-router.post('/api/supply-request', (req, res) => {
+app.post('/api/supply-request', (req, res) => {
 	// TODO
 });
 
-app.use('/.netlify/functions', router);
+const port = process.env.PORT || 8000;
 
-// app.listen(port, () => {
-// 	console.log(`Example app listening at http://localhost:${port}`);
-// });
+app.listen(port, () => {
+	console.log(`Example app listening at http://localhost:${port}`);
+});

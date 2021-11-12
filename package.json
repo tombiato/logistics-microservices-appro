@@ -5,8 +5,7 @@
 	"main": "index.js",
 	"scripts": {
 		"dev": "nodemon src/api",
-		"start": "./node_modules/.bin/netlify-lambda serve src",
-		"build": "./node_modules/.bin/netlify-lambda build src"
+		"start": "node src/api"
 	},
 	"repository": {
 		"type": "git",
