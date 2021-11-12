@@ -1,5 +1,5 @@
 const express = require('express');
-
+const notificationService = require('./services/notifcation-service');
 // GLOBAL
 require('dotenv').config();
 const port = process.env.PORT || 8000;
@@ -11,7 +11,8 @@ connectDB();
 const app = express();
 
 app.get('/', (req, res) => {
-	res.send('Hello World!');
+	const resultat = notificationService.ping(4)
+	res.send(resultat);
 });
 
 app.get('/ping', (req, res) => {
