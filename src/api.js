@@ -6,6 +6,8 @@ import connectDB from '../config/db';
 // MODELS
 import SupplyProductDto from '../models/SupplyProductDto';
 import SupplyInputDto from '../models/SupplyInputDto';
+import SupplyRequestDto from '../models/SupplyRequestDto';
+import SupplySummaryDto from '../models/SupplySummaryDto';
 
 // GLOBAL
 dotenv.config();
@@ -53,6 +55,20 @@ app.post('/api/supply', async (req, res) => {
 				chunk => chunk.ean === product.ean
 			);
 
+			if (singleProduct[0] === undefined) {
+				// 'POST /api/products -> newProduct'
+				await axios.post(
+					'https://fhemery-logistics.herokuapp.com/api/products',
+					{
+						ean: newProduct.ean,
+						name: newProduct.name,
+						description: newProduct.description,
+						price: newProduct.purchasePricePerUnit,
+						categories: [],
+					}
+				);
+			}
+
 			const productId = singleProduct[0]._id;
 
 			const targetUrl = `https://logistics-microservices-stock.herokuapp.com/api/stock/${productId}/movement`;
@@ -62,16 +78,15 @@ app.post('/api/supply', async (req, res) => {
 				quantity: product.quantity,
 				status: 'Supply',
 			});
-
-			console.log(res);
 		}
 
 		const newInput = new SupplyInputDto({
 			supplyId: supplyId,
 			products: productsArray,
 		});
+
 		await newInput.save();
-		
+
 		res.status(204).send();
 	} catch (err) {
 		console.error(err.message);
@@ -98,18 +113,57 @@ app.get('/api/supply/summary', async (req, res) => {
 					: 0,
 		});
 
+		await summary.save();
+
 		res.status(200).json(summary);
 	} catch (err) {
 		console.error(err.message);
 	}
 });
 
-app.post('/api/supply-needed', (req, res) => {
-	// TODO
-});
+app.post('/api/supply-needed', async (req, res) => {
+	try {
+		const productNeededId = req.body.productId;
 
-app.post('/api/supply-request', (req, res) => {
-	// TODO
+		if (
+			!productNeededId ||
+			productNeededId === undefined ||
+			productNeededId === null
+		) {
+			res
+				.status(400)
+				.send('400 Bad Request: the request is not valid incorrect body');
+		}
+
+		const catalogue = await axios.get(
+			'https://fhemery-logistics.herokuapp.com/api/products'
+		);
+
+		const singleProduct = catalogue.data.filter(
+			chunk => chunk._id === productNeededId
+		);
+
+		if (!singleProduct || singleProduct == undefined || singleProduct == null) {
+			res.status(404).send('404 Not Found: no product finded in the catalogue');
+		}
+
+		const eanNeeded = singleProduct[0].ean;
+
+		const supplyRequest = new SupplyRequestDto({
+			ean: eanNeeded,
+		});
+
+		await supplyRequest.save();
+
+		await axios.post(
+			'https://fhemery-logistics.herokuapp.com/api/supply-request',
+			supplyRequest
+		);
+
+		res.status(204).send({ ean: eanNeeded });
+	} catch (err) {
+		console.error(err.message);
+	}
 });
 
 const port = process.env.PORT || 8000;
