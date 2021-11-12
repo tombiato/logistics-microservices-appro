@@ -1,11 +1,11 @@
-import mongoose from "mongoose";
+import { model, models, Schema } from 'mongoose';
 
-export default mongoose.models.SupplySummaryDto ||
-  mongoose.model(
-    "SupplySummaryDto",
-    new mongoose.Schema({
-      nbSupplies: Number,
-      totalNbProducts: Number,
-      totalPurchasePrice: Number,
-    }),
-  );
+export default models.SupplySummaryDto ||
+	model(
+		'SupplySummaryDto',
+		new Schema({
+			nbSupplies: Number,
+			totalNbProducts: Number,
+			totalPurchasePrice: Number,
+		})
+	);
