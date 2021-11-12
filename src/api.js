@@ -26,7 +26,11 @@ app.post('/api/supply', async (req, res) => {
 
 		for (const product of products) {
 			targetUrl = `/api/stock/${product.ean}/movement`;
-			const res = await axios.post(targetUrl);
+			const res = await axios.post(targetUrl, {
+				productId: product.name, // This ID is the ID inside the catalogue
+				quantity: product.quantity,
+				status: 'Supply',
+			});
 		}
 
 		res.status(204);
