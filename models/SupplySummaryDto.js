@@ -1,10 +1,11 @@
-const { model, Schema } = require("mongoose");
+import { model, models, Schema } from "mongoose";
 
-module.exports = model(
-  "SupplySummaryDto",
-  new Schema({
-    nbSupplies: Number,
-    totalNbProducts: Number,
-    totalPurchasePrice: Number,
-  }),
-);
+export default models.SupplySummaryDto ||
+  model(
+    "SupplySummaryDto",
+    new Schema({
+      nbSupplies: Number,
+      totalNbProducts: Number,
+      totalPurchasePrice: Number,
+    }),
+  );

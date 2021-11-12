@@ -1,6 +1,6 @@
-import express from 'express';
-import dotenv from 'dotenv';
-import connectDB from '../config/db';
+import express from "express";
+import dotenv from "dotenv";
+import connectDB from "../config/db";
 
 // GLOBAL
 dotenv.config();
@@ -24,7 +24,7 @@ app.post("/api/supply", (req, res) => {
 });
 
 app.get("/api/supply/summary", async (req, res) => {
-  res.status(200).json(await SupplySummaryDto.find({}));
+  // TODO
 });
 
 app.post("/api/supply-needed", (req, res) => {
