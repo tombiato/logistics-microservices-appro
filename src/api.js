@@ -55,8 +55,30 @@ app.post('/api/supply', async (req, res) => {
 	}
 });
 
-app.get('/api/supply/summary', (req, res) => {
-	// TODO
+app.get('/api/supply/summary', async (req, res) => {
+	try {
+		const supplies = await SupplyProductDto.find({});
+
+		const summary = new SupplySummaryDto({
+			nbSupplies: supplies.length,
+			totalNbProducts:
+				supplies.length > 0
+					? supplies
+							.map(s => s.quantity)
+							.reduce((previous, current) => previous + current)
+					: 0,
+			totalPurchasePrice:
+				supplies.length > 0
+					? supplies
+							.map(s => s.quantity * s.purchasePricePerUnit)
+							.reduce((previous, current) => previous + current)
+					: 0,
+		});
+
+		res.status(200).json(summary);
+	} catch (err) {
+		console.error(err.message);
+	}
 });
 
 app.post('/api/supply-needed', (req, res) => {
