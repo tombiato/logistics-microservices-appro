@@ -24,7 +24,7 @@ app.get('/', (req, res) => {
 	res.send('Hello World!');
 });
 
-app.get('api/ping', (req, res) => {
+app.get('/api/ping', (req, res) => {
 	res.send('Pong');
 });
 
@@ -91,8 +91,6 @@ app.post('/api/supply', async (req, res) => {
 				`https://logistics-microservices-stock.herokuapp.com/api/stock/${productId}/movement`,
 				productMovement
 			);
-
-			console.log(res.status);
 		}
 
 		const newInput = new SupplyInputDto({
