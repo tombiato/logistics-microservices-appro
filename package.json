@@ -5,8 +5,8 @@
 	"main": "index.js",
 	"type": "module",
 	"scripts": {
-		"dev": "nodemon src/api",
-		"start": "node src/api"
+		"dev": "nodemon --es-module-specifier-resolution=node src/api",
+		"start": "node --es-module-specifier-resolution=node src/api"
 	},
 	"repository": {
 		"type": "git",

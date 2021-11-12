@@ -1,11 +1,11 @@
-const express = require('express');
+import express from 'express';
+import dotenv from 'dotenv';
+import connectDB from '../config/db';
 
 // GLOBAL
-require('dotenv').config();
+dotenv.config();
 
 const app = express();
-
-const connectDB = require('../config/db');
 
 connectDB();
 
